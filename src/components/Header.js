@@ -3,7 +3,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Badge from '@mui/material/Badge';
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom'; // Assuming you're using React Router for routing
 
 const Header = () => {
