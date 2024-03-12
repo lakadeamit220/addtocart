@@ -4,8 +4,14 @@ import Nav from 'react-bootstrap/Nav';
 import Badge from '@mui/material/Badge';
 import Menu from '@mui/material/Menu';
 import { Link } from 'react-router-dom'; // Assuming you're using React Router for routing
+import { useSelector } from 'react-redux';
+import { Table } from 'react-bootstrap';
+
 
 const Header = () => {
+
+    const getdata = useSelector((state) => state.cartreducer.carts);
+
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -25,7 +31,7 @@ const Header = () => {
                         <Nav.Link href="#home">Home</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
-                <Badge badgeContent={4} color="primary"
+                <Badge badgeContent={getdata.length} color="primary"
                     id="basic-button"
                     aria-controls={open ? 'basic-menu' : undefined}
                     aria-haspopup="true"
@@ -44,13 +50,29 @@ const Header = () => {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <div className='card_details d-flex justify-content-center align-items-center' style={{ width: "24rem", padding: 10, position: "relative" }}>
-                    <i className='fas fa-close smallclose'
-                        onClick={handleClose} style={{ position: "absolute", top: 2, right: 20, fontSize: 23, cursor: "pointer" }}></i>
-                    <p style={{ fontSize: 22 }}>Your cart is empty</p>
-                    <img src="./cart.gif" alt="" className='emptycart_img' style={{ width: "5rem", padding: 10 }} />
-                </div>
+                {
+                    getdata.length ?
+                        <div className='card_details' style={{ width: "24rem", padding: 10 }}>
+                            <Table>
+                                <thead>
+                                    <th>Photo</th>
+                                    <th>Restaurant Name</th>
+                                </thead>
+                                <tbody>
+                                    {
+                                        getdata.map((e) => {
 
+                                        })
+                                    }
+                                </tbody>
+                            </Table>
+                        </div> : <div className='card_details d-flex justify-content-center align-items-center' style={{ width: "24rem", padding: 10, position: "relative" }}>
+                            <i className='fas fa-close smallclose'
+                                onClick={handleClose} style={{ position: "absolute", top: 2, right: 20, fontSize: 23, cursor: "pointer" }}></i>
+                            <p style={{ fontSize: 22 }}>Your cart is empty</p>
+                            <img src="./cart.gif" alt="" className='emptycart_img' style={{ width: "5rem", padding: 10 }} />
+                        </div>
+                }
             </Menu>
         </Navbar>
     );
