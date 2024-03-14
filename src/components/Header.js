@@ -15,7 +15,7 @@ const Header = () => {
     const total = () => {
         let price = 0;
         getdata.map((ele, k) => {
-            price = ele.price + price
+            price = (ele.price * ele.qnty) + price
         });
         setPrice(price);
     }
@@ -91,7 +91,7 @@ const Header = () => {
                                                         <td>
                                                             <p>{e.rname}</p>
                                                             <p>Price: ₹ {e.price}</p>
-                                                            <p>Quentity: {e.qnty}</p>
+                                                            <p>Quantity: {e.qnty}</p>
                                                             <p onClick={() => rmv(e.id)}><i className='fas fa-trash smalltrash' style={{ color: 'red', fontSize: '20px', cursor: 'pointer' }}></i></p>
                                                         </td>
                                                         <td>
