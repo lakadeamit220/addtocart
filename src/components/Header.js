@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Badge from '@mui/material/Badge';
 import Menu from '@mui/material/Menu';
 import { Link, NavLink } from 'react-router-dom'; // Assuming you're using React Router for routing
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Table } from 'react-bootstrap';
+import { RMV } from '../redux/actions/action';
 
 
 const Header = () => {
 
+    const [price, setPrice] = useState(0);
+    const total = () => {
+        let price = 0;
+        getdata.map((ele, k) => {
+            price = ele.price + price
+        });
+        setPrice(price);
+    }
+    useEffect(()=>{
+        total()
+    },[total])
+
     const getdata = useSelector((state) => state.cartreducer.carts);
+
+    const dispatch = useDispatch();
+
+    const rmv = (id) => {
+        dispatch(RMV(id));
+    }
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -73,17 +92,17 @@ const Header = () => {
                                                             <p>{e.rname}</p>
                                                             <p>Price: ₹ {e.price}</p>
                                                             <p>Quentity: {e.qnty}</p>
-                                                            <p><i className='fas fa-trash smalltrash' style={{ color: 'red', fontSize: '20px', cursor: 'pointer' }}></i></p>
+                                                            <p onClick={() => rmv(e.id)}><i className='fas fa-trash smalltrash' style={{ color: 'red', fontSize: '20px', cursor: 'pointer' }}></i></p>
                                                         </td>
                                                         <td>
-                                                            <p><i className='fas fa-trash largetrash' style={{ color: 'red', fontSize: '20px', cursor: 'pointer' }}></i></p>
+                                                            <p onClick={() => rmv(e.id)}><i className='fas fa-trash largetrash' style={{ color: 'red', fontSize: '20px', cursor: 'pointer' }}></i></p>
                                                         </td>
                                                     </tr >
                                                 </>
                                             )
                                         })
                                     }
-                                    <p className='text-center'>Total: ₹ 350</p>
+                                    <p className='text-center'>Total: ₹ {price}</p>
                                 </tbody>
                             </Table>
                         </div> : <div className='card_details d-flex justify-content-center align-items-center' style={{ width: "24rem", padding: 10, position: "relative" }}>

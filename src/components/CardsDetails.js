@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { Table } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { RMV } from '../redux/actions/action';
+
 
 const CardsDetails = () => {
   const [data, setData] = useState([]);
   const { id } = useParams();
   const getdata = useSelector((state) => state.cartreducer.carts);
+
+  const history = useNavigate();
+
+  const dispatch = useDispatch();
+  const rmv = (id) => {
+    dispatch(RMV(id));
+    history("/");
+  }
+  
 
   const compare = () => {
     let comparedata = getdata.filter((e) => {
@@ -44,7 +55,7 @@ const CardsDetails = () => {
                           <td>
                             <p><strong>Rating : </strong> <span style={{ background: 'green', color: 'white', padding: '2px 5px', borderRadius: '5px' }}>{ele.rating} ★</span></p>
                             <p><strong>Order Review : </strong>{ele.somedata}</p>
-                            <p><strong>Remove : </strong><i className='fas fa-trash' style={{ color: 'red', fontSize: '20px', cursor: 'pointer' }}></i></p>
+                            <p><strong>Remove : </strong><i className='fas fa-trash' style={{ color: 'red', fontSize: '20px', cursor: 'pointer' }} onClick={() => rmv(ele.id)}></i></p>
                           </td>
                         </tr>
                       </Table>
