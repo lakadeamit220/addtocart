@@ -3,7 +3,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Badge from '@mui/material/Badge';
 import Menu from '@mui/material/Menu';
-import { Link } from 'react-router-dom'; // Assuming you're using React Router for routing
+import { Link, NavLink } from 'react-router-dom'; // Assuming you're using React Router for routing
 import { useSelector } from 'react-redux';
 import { Table } from 'react-bootstrap';
 
@@ -61,9 +61,29 @@ const Header = () => {
                                 <tbody>
                                     {
                                         getdata.map((e) => {
-
+                                            return (
+                                                <>
+                                                    <tr>
+                                                        <td>
+                                                            <NavLink to={`/cart/${e.id}`} onClick={handleClose}>
+                                                                <img src={e.imgdata} alt='Image' style={{ width: '5rem', height: '5rem' }} />
+                                                            </NavLink>
+                                                        </td>
+                                                        <td>
+                                                            <p>{e.rname}</p>
+                                                            <p>Price: ₹ {e.price}</p>
+                                                            <p>Quentity: {e.qnty}</p>
+                                                            <p><i className='fas fa-trash smalltrash' style={{ color: 'red', fontSize: '20px', cursor: 'pointer' }}></i></p>
+                                                        </td>
+                                                        <td>
+                                                            <p><i className='fas fa-trash largetrash' style={{ color: 'red', fontSize: '20px', cursor: 'pointer' }}></i></p>
+                                                        </td>
+                                                    </tr >
+                                                </>
+                                            )
                                         })
                                     }
+                                    <p className='text-center'>Total: ₹ 350</p>
                                 </tbody>
                             </Table>
                         </div> : <div className='card_details d-flex justify-content-center align-items-center' style={{ width: "24rem", padding: 10, position: "relative" }}>
@@ -74,7 +94,7 @@ const Header = () => {
                         </div>
                 }
             </Menu>
-        </Navbar>
+        </Navbar >
     );
 }
 
