@@ -7,6 +7,7 @@ import { Link, NavLink } from 'react-router-dom'; // Assuming you're using React
 import { useDispatch, useSelector } from 'react-redux';
 import { Table } from 'react-bootstrap';
 import { RMV } from '../redux/actions/action';
+import { loadStripe } from '@stripe/stripe-js';
 
 
 const Header = () => {
@@ -19,9 +20,9 @@ const Header = () => {
         });
         setPrice(price);
     }
-    useEffect(()=>{
+    useEffect(() => {
         total()
-    },[total])
+    }, [total])
 
     const getdata = useSelector((state) => state.cartreducer.carts);
 
@@ -39,6 +40,46 @@ const Header = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+
+    //make payment
+    const makePayment = async () => {
+    try {
+        const stripe = await loadStripe("pk_test_51OlpnYSG3OA5HLCL0xqqL9eWwP9Bwx4O4xd3T5RrRZPKxDCrxdeWYaiuMmxVZcP1nPjOSYsEIIVP9OnatEY5mJ9d00KvOJdzBW");
+
+        const body = {
+            products: getdata
+        }
+
+        const headers = {
+            "Content-Type": "application/json"
+        }
+
+        const response = await fetch("http://localhost:7000/api/create-checkout-session", {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+        }
+
+        const session = await response.json();
+
+        const result = await stripe.redirectToCheckout({
+            sessionId: session.id
+        });
+
+        if (result.error) {
+            throw new Error(`Stripe error: ${result.error.message}`);
+        }
+    } catch (error) {
+        console.error("Payment error:", error);
+        // Handle error gracefully (e.g., display error message to user)
+    }
+}
+
 
     return (
         <Navbar bg="dark" variant="dark" expand="lg" className="border-bottom border-body" style={{ height: "60px" }}>
@@ -102,7 +143,8 @@ const Header = () => {
                                             )
                                         })
                                     }
-                                    <p className='text-center'>Total: ₹ {price}</p>
+                                    <p className='text-center' style={{ fontSize: '18px', fontWeight: 'bold', color: 'red' }}>Total: ₹ {price}</p>
+                                    <button style={{ marginTop: '20px', background: 'green', color: 'white', padding: '10px 20px', borderRadius: '5px', border: 'none', cursor: 'pointer' }} onClick={makePayment}>Checkout</button>
                                 </tbody>
                             </Table>
                         </div> : <div className='card_details d-flex justify-content-center align-items-center' style={{ width: "24rem", padding: 10, position: "relative" }}>
